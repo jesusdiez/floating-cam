@@ -32,6 +32,24 @@
 
 ## Install
 
+### Homebrew
+
+```bash
+brew install --cask neo22s/floating-cam/floating-camera
+```
+
+That pulls the cask from the [homebrew-floating-cam](https://github.com/neo22s/homebrew-floating-cam) tap, which mirrors `Casks/floating-camera.rb` from this repository. Every release bumps it, so there is nothing to maintain by hand.
+
+```bash
+brew upgrade --cask --greedy floating-camera   # update
+brew uninstall --cask floating-camera          # remove
+brew uninstall --cask --zap floating-camera    # remove, including preferences
+```
+
+The app also updates itself from GitHub Releases, so with Homebrew you can simply leave it alone.
+
+### From source
+
 ```bash
 git clone <repository-url>
 cd floating-cam
@@ -91,7 +109,7 @@ Resolution and frame rate change the camera capture settings. They mainly affect
 
 The app checks `https://api.github.com/repos/<owner>/<repo>/releases/latest` once every 30 days on launch. If a newer version exists, it offers to download and install it, then relaunches. The updater verifies the bundle identifier and version, installs over the current app, removes the download quarantine attribute, and relaunches. If the app folder is not writable, it opens the release page instead.
 
-GitHub Actions builds the app on every push/PR and creates a release when a `v*` tag is pushed. The build injects the repository metadata into `Info.plist`, so CI-built apps update from their own release feed.
+GitHub Actions builds the app on every push/PR and creates a release when a `v*` tag is pushed. The build injects the repository metadata into `Info.plist`, so CI-built apps update from their own release feed. The same workflow updates `Casks/floating-camera.rb` with the new version and SHA256.
 
 To publish a release:
 
@@ -103,7 +121,7 @@ git tag v1.0.1
 git push origin v1.0.1
 ```
 
-The workflow verifies that the tag and `Info.plist` version match, builds a universal app, packages `FloatingCamera.zip`, and creates the GitHub Release using `RELEASE_NOTES.md`.
+The workflow verifies that the tag and `Info.plist` version match, builds a universal app, packages `FloatingCamera.zip`, creates the GitHub Release using `RELEASE_NOTES.md`, and commits the matching Homebrew cask update.
 
 For a local build with updates enabled:
 

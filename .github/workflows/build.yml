@@ -11,9 +11,12 @@ permissions:
 
 jobs:
   build:
+    if: github.event_name != 'push' || !contains(github.event.head_commit.message, '[cask]')
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Run tests
         run: |
@@ -59,3 +62,27 @@ jobs:
           gh release create "$GITHUB_REF_NAME" FloatingCamera.zip \
             --title "Floating Camera $GITHUB_REF_NAME" \
             --notes-file RELEASE_NOTES.md
+
+      - name: Update Homebrew cask
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Info.plist)
+          SHA=$(shasum -a 256 FloatingCamera.zip | cut -d' ' -f1)
+
+          git fetch origin "$BRANCH"
+          git checkout -B "$BRANCH" "origin/$BRANCH"
+
+          sed -i '' "s/^  version \".*\"/  version \"$VERSION\"/" Casks/floating-camera.rb
+          sed -i '' "s/^  sha256 \".*\"/  sha256 \"$SHA\"/" Casks/floating-camera.rb
+
+          if git diff --quiet Casks/floating-camera.rb; then
+            echo "Cask already points to $VERSION"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "cask: floating-camera $VERSION [cask]" Casks/floating-camera.rb
+          git push origin "$BRANCH"
