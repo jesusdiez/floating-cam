@@ -8,6 +8,8 @@
 
 <p align="center">macOS 14+ · Swift + AppKit · No dependencies · MIT</p>
 
+<p align="center"><code>brew install --cask neo22s/floating-cam/floating-camera</code></p>
+
 ![Floating Camera floating over a desktop](assets/hero.png)
 
 ## Features
@@ -32,7 +34,7 @@
 
 ## Install
 
-### Homebrew
+### Homebrew (recommended)
 
 ```bash
 brew install --cask neo22s/floating-cam/floating-camera
@@ -51,7 +53,7 @@ The app also updates itself from GitHub Releases, so with Homebrew you can simpl
 ### From source
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/neo22s/floating-cam.git
 cd floating-cam
 chmod +x build.sh
 ./build.sh
@@ -109,7 +111,7 @@ Resolution and frame rate change the camera capture settings. They mainly affect
 
 The app checks `https://api.github.com/repos/<owner>/<repo>/releases/latest` once every 30 days on launch. If a newer version exists, it offers to download and install it, then relaunches. The updater verifies the bundle identifier and version, installs over the current app, removes the download quarantine attribute, and relaunches. If the app folder is not writable, it opens the release page instead.
 
-GitHub Actions builds the app on every push/PR and creates a release when a `v*` tag is pushed. The build injects the repository metadata into `Info.plist`, so CI-built apps update from their own release feed. The same workflow updates `Casks/floating-camera.rb` with the new version and SHA256.
+GitHub Actions builds the app on every push/PR and creates a release when a `v*` tag is pushed. The build injects the repository metadata into `Info.plist`, so CI-built apps update from their own release feed. The same workflow updates `Casks/floating-camera.rb` with the new version and SHA256, and the [tap](https://github.com/neo22s/homebrew-floating-cam) mirrors that file within six hours, so `brew` picks the release up without any manual step.
 
 To publish a release:
 
@@ -117,8 +119,8 @@ To publish a release:
 2. Commit, then push a matching tag:
 
 ```bash
-git tag v1.0.1
-git push origin v1.0.1
+git tag v1.1.1
+git push origin v1.1.1
 ```
 
 The workflow verifies that the tag and `Info.plist` version match, builds a universal app, packages `FloatingCamera.zip`, creates the GitHub Release using `RELEASE_NOTES.md`, and commits the matching Homebrew cask update.
