@@ -1,10 +1,10 @@
-# Floating Camera 1.1.0
+# Floating Camera 1.2.0
 
 A lightweight, native macOS menu bar app that keeps your camera floating above everything else. No Dock icon, no Electron, no account, no analytics.
 
-## What's new in 1.1.0
+## What's new in 1.2.0
 
-- **Vertical Rectangle** shape (9:16): crops the sides of the camera image, ideal for vertical video. Supports the **Rounding** slider.
+- **4K capture** (3840 × 2160) for cameras that support it, such as Continuity Camera or a 4K USB webcam. It is greyed out when the active camera cannot deliver it, and the app always falls back to the best preset the camera does support.
 
 ![Floating Camera shapes](https://raw.githubusercontent.com/neo22s/floating-cam/master/assets/shapes.png)
 
@@ -33,7 +33,7 @@ The aperture icon appears in the menu bar. Click it to open the menu.
 - **Opacity** — 10–100%.
 - **Rounding** — rounds Rectangle, Vertical Rectangle, Rounded Square and Square. It only appears for those shapes.
 - **Zoom** — crop the image inside the shape from 100% to 300%.
-- **Advanced** — resolution (480p/720p/1080p), frame rate (15/24/30/60 fps), mirror, always on top, reset position, check for updates and language.
+- **Advanced** — resolution (480p/720p/1080p/4K), frame rate (15/24/30/60 fps), mirror, always on top, reset position, check for updates and language.
 - **Hide Camera** — hides the overlay and stops the capture session. Use `⌃⌥H` from anywhere.
 - **Quit** — quits the app.
 
@@ -53,6 +53,7 @@ Because the app is ad-hoc signed, macOS may ask for camera permission again afte
 - Hiding the camera stops the capture session completely: 0% camera CPU while hidden.
 - No analytics, telemetry, or account. The only network request is the update check.
 - Resolution and frame rate mainly affect camera bandwidth, heat and image quality. The app's CPU stays low because it does no per-frame filtering.
+- **4K** is only offered when the camera reports support for it. It uses the most bandwidth and can warm the camera, so 720p or 1080p remain a better fit for a small floating window.
 
 ## Build from source
 
@@ -69,13 +70,13 @@ MIT. Based on the original Floating Camera by Tomás Menezes (@tomasmenezes), al
 
 ---
 
-# Floating Camera 1.1.0 — Español
+# Floating Camera 1.2.0 — Español
 
 Una utilidad nativa y ligera para macOS que mantiene tu cámara flotando sobre todo lo demás. Sin icono en el Dock, sin Electron, sin cuenta y sin analíticas.
 
-## Novedades de 1.1.0
+## Novedades de 1.2.0
 
-- Nueva forma **Rectángulo vertical** (9:16): recorta los laterales de la imagen, ideal para vídeo vertical. Admite el slider de **Redondeo**.
+- **Captura en 4K** (3840 × 2160) en cámaras que lo admiten, como Continuity Camera o una webcam USB 4K. Aparece en gris cuando la cámara activa no puede ofrecerlo, y la app siempre cae en el mejor preset que la cámara sí soporte.
 
 ## Descargar e instalar
 
@@ -102,7 +103,7 @@ Haz clic en el icono de apertura de la barra de menús.
 - **Opacidad** — de 10% a 100%.
 - **Redondeo** — redondea Rectángulo, Rectángulo vertical, Cuadrado redondeado y Cuadrado. Solo aparece con esas formas.
 - **Zoom** — recorta la imagen dentro de la forma, de 100% a 300%.
-- **Avanzado** — resolución (480p/720p/1080p), FPS (15/24/30/60), espejo, siempre encima, restablecer posición, buscar actualizaciones e idioma.
+- **Avanzado** — resolución (480p/720p/1080p/4K), FPS (15/24/30/60), espejo, siempre encima, restablecer posición, buscar actualizaciones e idioma.
 - **Ocultar cámara** — oculta el overlay y detiene la captura. Atajo global: `⌃⌥H`.
 - **Salir** — cierra la app.
 
@@ -122,6 +123,7 @@ Como la firma es ad-hoc, macOS puede volver a pedir permiso de cámara después 
 - Al ocultar la cámara se detiene la sesión de captura: 0% de CPU de cámara.
 - Sin analíticas, telemetría ni cuentas. La única petición de red es la búsqueda de actualizaciones.
 - La resolución y los FPS afectan sobre todo a ancho de banda, calor y calidad; el CPU de la app se mantiene bajo porque no procesa frames.
+- **4K** solo se ofrece cuando la cámara indica que lo soporta. Es lo que más ancho de banda consume y puede calentar la cámara, así que 720p o 1080p siguen siendo mejores para una ventana flotante pequeña.
 
 ## Licencia
 
