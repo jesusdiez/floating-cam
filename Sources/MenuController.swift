@@ -206,11 +206,16 @@ final class MenuController: NSObject, NSMenuDelegate {
         sizeItem.isEnabled = true
         sizeSlider.setValue(settings.customWidth)
 
+        let supportedResolutions = app.supportedResolutions
         for item in resolutionMenu.items {
             guard let raw = item.representedObject as? String,
                   let resolution = CameraResolution(rawValue: raw)
             else { continue }
             item.state = resolution == settings.resolution ? .on : .off
+            // Grey out what the active camera cannot deliver (e.g. 4K on a 1080p camera).
+            // If the probe gave nothing at all, keep everything selectable: the camera
+            // manager still falls back to the best preset it can apply.
+            item.isEnabled = supportedResolutions.isEmpty || supportedResolutions.contains(resolution)
         }
         resolutionItem.isEnabled = app.activeCameraID != nil
 

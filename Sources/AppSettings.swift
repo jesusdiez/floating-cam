@@ -57,20 +57,34 @@ enum CameraResolution: String, CaseIterable, Codable {
     case p480
     case p720
     case p1080
+    case p4K
 
     var title: String {
         switch self {
         case .p480: return "480p"
         case .p720: return "720p"
         case .p1080: return "1080p"
+        case .p4K: return "4K"
         }
     }
 
-    var detail: String {
+    var detail: String { "\(pixelWidth) × \(pixelHeight)" }
+
+    var pixelWidth: Int {
         switch self {
-        case .p480: return "640 × 480"
-        case .p720: return "1280 × 720"
-        case .p1080: return "1920 × 1080"
+        case .p480: return 640
+        case .p720: return 1280
+        case .p1080: return 1920
+        case .p4K: return 3840
+        }
+    }
+
+    var pixelHeight: Int {
+        switch self {
+        case .p480: return 480
+        case .p720: return 720
+        case .p1080: return 1080
+        case .p4K: return 2160
         }
     }
 
@@ -79,11 +93,21 @@ enum CameraResolution: String, CaseIterable, Codable {
         case .p480: return .medium
         case .p720: return .hd1280x720
         case .p1080: return .hd1920x1080
+        case .p4K: return .hd4K3840x2160
         }
+    }
+
+    /// Resolutions below this one, highest first. Used to degrade gracefully when a
+    /// camera does not support the requested preset.
+    var lowerResolutions: [CameraResolution] {
+        CameraResolution.allCases
+            .filter { $0.pixelHeight < pixelHeight }
+            .sorted { $0.pixelHeight > $1.pixelHeight }
     }
 
     static func closest(to preset: AVCaptureSession.Preset) -> CameraResolution? {
         switch preset {
+        case .hd4K3840x2160: return .p4K
         case .hd1920x1080, .high: return .p1080
         case .hd1280x720: return .p720
         case .medium: return .p480

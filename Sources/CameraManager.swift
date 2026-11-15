@@ -70,6 +70,7 @@ final class CameraManager {
     private var currentFrameRate: FrameRate = .fps30
     private var shouldRun = false
     private var _activeDeviceID: String?
+    private var _supportedResolutions: Set<CameraResolution> = []
     private var observers: [NSObjectProtocol] = []
 
     private(set) var devices: [CameraDeviceInfo] = []
@@ -80,6 +81,14 @@ final class CameraManager {
         stateLock.lock()
         defer { stateLock.unlock() }
         return _activeDeviceID
+    }
+
+    /// Resolutions the current capture session can actually deliver. Empty until the
+    /// session has been configured with a camera.
+    var supportedResolutions: Set<CameraResolution> {
+        stateLock.lock()
+        defer { stateLock.unlock() }
+        return _supportedResolutions
     }
 
     init() {
@@ -202,6 +211,7 @@ final class CameraManager {
                 self.currentResolution = actualResolution
                 self.setActiveDeviceID(device.uniqueID)
                 session.commitConfiguration()
+                self.refreshSupportedResolutions(session)
 
                 self.currentFrameRate = self.applyFrameRate(self.currentFrameRate, to: device)
                 let info = Self.info(for: device)
@@ -245,6 +255,7 @@ final class CameraManager {
             session.beginConfiguration()
             let actualResolution = self.applyResolution(resolution, to: session)
             session.commitConfiguration()
+            self.refreshSupportedResolutions(session)
             self.currentResolution = actualResolution
             self.currentFrameRate = self.applyFrameRate(self.currentFrameRate, to: device)
 
@@ -357,6 +368,7 @@ final class CameraManager {
             self.currentResolution = actualResolution
             self.setActiveDeviceID(device.uniqueID)
             session.commitConfiguration()
+            self.refreshSupportedResolutions(session)
 
             self.currentFrameRate = self.applyFrameRate(frameRate, to: device)
             let info = Self.info(for: device)
@@ -376,6 +388,7 @@ final class CameraManager {
 
             if self.shouldRun, !session.isRunning {
                 session.startRunning()
+                self.refreshSupportedResolutions(session)
                 self.currentFrameRate = self.applyFrameRate(self.currentFrameRate, to: device)
             }
         }
@@ -390,7 +403,7 @@ final class CameraManager {
             return resolution
         }
 
-        for fallback in [CameraResolution.p720, .p480] where fallback != resolution {
+        for fallback in resolution.lowerResolutions {
             if session.canSetSessionPreset(fallback.preset) {
                 session.sessionPreset = fallback.preset
                 return fallback
@@ -398,6 +411,13 @@ final class CameraManager {
         }
 
         return CameraResolution.closest(to: session.sessionPreset) ?? resolution
+    }
+
+    private func refreshSupportedResolutions(_ session: AVCaptureSession) {
+        let supported = Set(CameraResolution.allCases.filter { session.canSetSessionPreset($0.preset) })
+        stateLock.lock()
+        _supportedResolutions = supported
+        stateLock.unlock()
     }
 
     private func applyFrameRate(_ frameRate: FrameRate, to device: AVCaptureDevice) -> FrameRate {

@@ -213,8 +213,15 @@ struct TestMain {
         equal(CameraResolution.p480.preset, .medium, "480p preset")
         equal(CameraResolution.p720.preset, .hd1280x720, "720p preset")
         equal(CameraResolution.p1080.preset, .hd1920x1080, "1080p preset")
+        equal(CameraResolution.p4K.preset, .hd4K3840x2160, "4K preset")
+        equal(CameraResolution.p4K.title, "4K", "4K title")
+        equal(CameraResolution.p4K.detail, "3840 × 2160", "4K detail")
+        check(CameraResolution.closest(to: .hd4K3840x2160) == .p4K, "4K preset maps to 4K")
         check(CameraResolution.closest(to: .high) == .p1080, "high preset maps to 1080p")
         check(CameraResolution.closest(to: .medium) == .p480, "medium preset maps to 480p")
+        equal(CameraResolution.p4K.lowerResolutions, [.p1080, .p720, .p480], "4K falls back downwards")
+        equal(CameraResolution.p720.lowerResolutions, [.p480], "720p falls back to 480p")
+        equal(CameraResolution.p480.lowerResolutions, [], "480p has no fallback")
     }
 
     static func testVersion() {

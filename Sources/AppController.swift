@@ -23,6 +23,7 @@ final class AppController {
     private var isSwitchingCamera = false
 
     var activeCameraID: String? { camera.activeDeviceID }
+    var supportedResolutions: Set<CameraResolution> { camera.supportedResolutions }
 
     init() {
         settings = store.load()

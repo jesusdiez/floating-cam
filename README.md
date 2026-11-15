@@ -19,7 +19,7 @@
 - **Zoom** the image inside the shape from 100% to 300%.
 - **English or Spanish UI**, following macOS by default.
 - **Border** width/color, **opacity**, and **rounding** (Rectangle, Vertical Rectangle, Rounded Square and Square).
-- **Camera** selection, **480p / 720p / 1080p** capture (720p by default), and **15/24/30/60 fps** (30 fps by default).
+- **Camera** selection, **480p / 720p / 1080p / 4K** capture (720p by default), and **15/24/30/60 fps** (30 fps by default). 4K is offered only when the active camera supports it.
 - **Mirror**, **Always on Top**, all Spaces, and full-screen support.
 - Drag to move; **Reset Position** centers the overlay on the current screen.
 - **Hide/Show** with `⌃⌥H`. The menu bar icon changes, the camera indicator turns off, and CPU drops to zero.
@@ -95,7 +95,7 @@ Allow camera access on first launch. Click the aperture icon in the menu bar.
 | Hide / Show Camera | Toggles the overlay and stops/restarts the camera session. |
 | Quit | Quit the app. |
 
-Resolution and Frame Rate fall back to the closest preset supported by the camera. **Language** can be System (default), English or Español; System follows the macOS language.
+Resolution and Frame Rate fall back to the closest preset supported by the camera. Resolutions the active camera cannot deliver are greyed out (for example, **4K** on a built-in FaceTime camera). **Language** can be System (default), English or Español; System follows the macOS language.
 
 Drag inside the overlay to move it. Use the **Size** slider to resize; the overlay keeps the selected shape's aspect ratio. Right-click the overlay for **Hide Camera**, **Reset Position** and **Quit**. The app does not steal focus until you click the overlay.
 
@@ -105,7 +105,8 @@ Resolution and frame rate change the camera capture settings. They mainly affect
 
 - **480p**: lowest camera load.
 - **720p**: recommended balance (default).
-- **1080p**: best quality, highest camera/GPU load.
+- **1080p**: best quality on most cameras, highest camera/GPU load.
+- **4K**: only available on cameras that support it (e.g. Continuity Camera or a 4K USB camera). Highest bandwidth and heat.
 
 ## Updates and releases
 
